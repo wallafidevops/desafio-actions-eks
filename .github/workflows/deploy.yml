@@ -20,6 +20,7 @@ jobs:
       GIT_USER_EMAIL: wallafisantos55@gmail.com
       ARGOCD_SERVER: argocd-server.argocd.svc.cluster.local
       ARGOCD_APP_NAME: filmes-v2
+      BRANCH_NAME: ${{ github.ref_name }}
     steps:
       - name: Checkout repositório atual
         uses: actions/checkout@v4
@@ -43,7 +44,7 @@ jobs:
           git clone https://${{ secrets.BITBUCKET_USERNAME }}:${{ secrets.BITBUCKET_PASSWORD }}@github.com/wallafidevops/desafio-actions-eks.git
           cd desafio-actions-eks
 
-          git fetch --depth=2 origin main
+          git fetch --depth=2 origin $BRANCH_NAME
 
           if git diff --name-only HEAD^ HEAD | grep -qv '^k8s/'; then
             echo "Há mudanças fora de k8s/"
@@ -58,7 +59,7 @@ jobs:
           git add ./k8s/
 
           git commit -m "[skip ci] Atualizando imagem para $AWS_ECR_URI/$IMAGE_NAME:$BUILD_ID" || echo "Nada para commitar"
-          git push --no-verify origin main
+          git push --no-verify origin $BRANCH_NAME
 
       - name: Fazer login e sincronizar com ArgoCD
         run: |
