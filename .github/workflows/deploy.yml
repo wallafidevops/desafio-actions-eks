@@ -43,7 +43,9 @@ jobs:
           rm -rf desafio-actions-eks
           git clone https://${{ secrets.BITBUCKET_USERNAME }}:${{ secrets.BITBUCKET_PASSWORD }}@github.com/wallafidevops/desafio-actions-eks.git
           cd desafio-actions-eks
+
           git checkout $BRANCH_NAME
+
           git fetch --depth=2 origin $BRANCH_NAME
 
           if git diff --name-only HEAD^ HEAD | grep -qv '^k8s/'; then
@@ -60,6 +62,7 @@ jobs:
 
           git commit -m "[skip ci] Atualizando imagem para $AWS_ECR_URI/$IMAGE_NAME:$BUILD_ID" || echo "Nada para commitar"
           git push --no-verify origin HEAD:$BRANCH_NAME
+
 
       - name: Fazer login e sincronizar com ArgoCD
         run: |
