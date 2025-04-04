@@ -54,8 +54,8 @@ jobs:
             exit 0
           fi
 
-          yq -y '(.spec.template.spec.containers[0].image) = "'"$AWS_ECR_URI/$IMAGE_NAME:$BUILD_ID"'"' ./k8s/deployment.yaml > temp.yaml && mv temp.yaml ./k8s/deploy/deployment.yaml
-          yq -y '(.spec.template.spec.containers[0].imagePullPolicy) = "Always"' ./k8s/deployment.yaml > temp.yaml && mv temp.yaml ./k8s/deploy/deployment.yaml
+          yq -y '(.spec.template.spec.containers[0].image) = "'"$AWS_ECR_URI/$IMAGE_NAME:$BUILD_ID"'"' ./k8s/deployment.yaml > temp.yaml && mv temp.yaml ./k8s/deployment.yaml
+          yq -y '(.spec.template.spec.containers[0].imagePullPolicy) = "Always"' ./k8s/deployment.yaml > temp.yaml && mv temp.yaml ./k8s/deployment.yaml
 
           git add ./k8s/deploy/
           git commit -m "[skip ci] Atualizando imagem para $AWS_ECR_URI/$IMAGE_NAME:$BUILD_ID" || echo "Nada para commitar"
