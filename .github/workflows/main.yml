@@ -26,7 +26,7 @@ jobs:
     name: build-dev    
     if: github.ref == 'refs/heads/develop'
     needs: [CI]    
-    uses: wallafidevops/desafio-actions/.github/workflows/build.yml@develop
+    uses: wallafidevops/desafio-actions-eks/.github/workflows/build.yml@develop
     with:
       environment: dev
     secrets: inherit      
@@ -35,7 +35,7 @@ jobs:
     name: build-prod  
     if: github.ref == 'refs/heads/main'
     needs: [CI]    
-    uses: wallafidevops/desafio-actions/.github/workflows/build.yml@main
+    uses: wallafidevops/desafio-actions-eks/.github/workflows/build.yml@main
     with:
       environment: prod
     secrets: inherit         
@@ -44,7 +44,7 @@ jobs:
     name: testes-dev
     if: github.ref == 'refs/heads/develop'   
     needs: [build-dev]
-    uses: wallafidevops/desafio-actions/.github/workflows/testes.yml@develop
+    uses: wallafidevops/desafio-actions-eks/.github/workflows/testes.yml@develop
     with:
       environment: dev   
     secrets: inherit
@@ -53,7 +53,7 @@ jobs:
     name: testes-prod
     if: github.ref == 'refs/heads/main'  
     needs: [build-prod]
-    uses: wallafidevops/desafio-actions/.github/workflows/testes.yml@main
+    uses: wallafidevops/desafio-actions-eks/.github/workflows/testes.yml@main
     with:
       environment: prod   
     secrets: inherit
@@ -63,7 +63,7 @@ jobs:
     name: release-dev
     if: github.ref == 'refs/heads/develop'
     needs: [testes-dev]
-    uses: wallafidevops/desafio-actions/.github/workflows/releases.yml@develop
+    uses: wallafidevops/desafio-actions-eks/.github/workflows/releases.yml@develop
     with:
       environment: dev   
     secrets: inherit
@@ -72,7 +72,7 @@ jobs:
     name: release-prod
     if: github.ref == 'refs/heads/main'
     needs: [testes-prod]
-    uses: wallafidevops/desafio-actions/.github/workflows/releases.yml@main
+    uses: wallafidevops/desafio-actions-eks/.github/workflows/releases.yml@main
     with:
       environment: prod   
     secrets: inherit
@@ -83,7 +83,7 @@ jobs:
     name: deploy-dev
     if: github.ref == 'refs/heads/develop'
     needs: [release-dev]
-    uses: wallafidevops/desafio-actions/.github/workflows/deploy.yml@develop
+    uses: wallafidevops/desafio-actions-eks/.github/workflows/deploy.yml@develop
     with:
       environment: prod
     secrets: inherit      
@@ -94,7 +94,7 @@ jobs:
     name: deploy-producao
     if: github.ref == 'refs/heads/main'
     needs: [release-prod]
-    uses: wallafidevops/desafio-actions/.github/workflows/deploy.yml@main
+    uses: wallafidevops/desafio-actions-eks/.github/workflows/deploy.yml@main
     with:
       environment: prod
     secrets: inherit
