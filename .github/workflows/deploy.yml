@@ -41,7 +41,7 @@ jobs:
       - name: Clonar repositório GitOps
         run: |
           rm -rf desafio-actions-eks
-          git clone https://${{ secrets.BITBUCKET_USERNAME }}:${{ secrets.BITBUCKET_PASSWORD }}@github.com/wallafidevops/desafio-actions-eks.git
+          git clone https://${{ secrets.GIT_USERNAME }}:${{ secrets.GIT_PASSWORD }}@github.com/wallafidevops/desafio-actions-eks.git
           cd desafio-actions-eks
           git checkout $BRANCH_NAME
           git fetch --depth=2 origin $BRANCH_NAME
