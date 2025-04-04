@@ -85,5 +85,3 @@ jobs:
     #             git add ./k8s
     #             git commit -m "Alteração para a imagem 216989136189.dkr.ecr.us-east-1.amazonaws.com/review-filmes:v${{ github.run_number }}" || echo "Nada para commitar"
     #             git push origin        
-
-
