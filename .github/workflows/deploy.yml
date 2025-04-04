@@ -24,7 +24,7 @@ jobs:
                 git config --global user.name "wallafidevops"
                 git config --global user.email "wallafisantos55@gmail.com"
                 git remote set-url origin git@github.com/wallafidevops/desafio-actions-eks.git
-                sed -i 's|image: 216989136189.dkr.ecr.us-east-1.amazonaws.com/review-filmes:v[0-9]\{1,3\}|image: 216989136189.dkr.ecr.us-east-1.amazonaws.com/review-filmes:v${{ github.run_number }}|g' ./ops/deploy/deployment.yml
+                sed -i 's|image: 216989136189.dkr.ecr.us-east-1.amazonaws.com/review-filmes:v[0-9]\{1,3\}|image: 216989136189.dkr.ecr.us-east-1.amazonaws.com/review-filmes:v${{ github.run_number }}|g' ./k8s/deployment.yaml
                 git add ./k8s
                 git commit -m "Alteração para a imagem 216989136189.dkr.ecr.us-east-1.amazonaws.com/review-filmes:v${{ github.run_number }}" || echo "Nada para commitar"
                 git push origin        
