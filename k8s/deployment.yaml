@@ -53,7 +53,7 @@ spec:
     spec:
       containers:
         - name: reviewfilmes
-          image: 216989136189.dkr.ecr.us-east-1.amazonaws.com/review-filmes
+          image: 216989136189.dkr.ecr.us-east-1.amazonaws.com/review-filmes:v1
           env:
           - name: ASPNETCORE_HTTP_PORTS
             value: "8080"
@@ -61,48 +61,7 @@ spec:
             value: "Host=postgre;Database=reviewfilmes;Username=reviewfilmes;Password=Passw0rd2024!"
           ports:
             - containerPort: 8080
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: reviewfilmes
-spec: 
-  selector:
-    app: reviewfilmes
-  ports:
-    - port: 80
-      targetPort: 8080
-      nodePort: 30000
-  type: NodePort
----
 
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: reviewfilmes
-  annotations:
-    alb.ingress.kubernetes.io/actions.ssl-redirect: '{"Type": "redirect", "RedirectConfig":
-      { "Protocol": "HTTPS", "Port": "443", "StatusCode": "HTTP_301"}}'  
-    alb.ingress.kubernetes.io/scheme: internet-facing
-    alb.ingress.kubernetes.io/target-type: ip
-    alb.ingress.kubernetes.io/subnets: subnet-01163f9b99019c875, subnet-008e307d1ef7f8aae
-    alb.ingress.kubernetes.io/healthcheck-path: /healthz/ready
-    alb.ingress.kubernetes.io/healthcheck-port: "80"    
-    alb.ingress.kubernetes.io/certificate-arn: "arn:aws:acm:us-east-1:216989136189:certificate/6e3207c2-a1d1-4745-81d9-f517eba3dacf"
-    alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}, {"HTTP":80}]'     
-    alb.ingress.kubernetes.io/group.name: grupo-ingress     
-spec:
-  ingressClassName: alb  
-  rules:
-  - host: homologacao.wsnobrega.life
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: reviewfilmes
-            port: 
-              number: 80
- 
+
+
                
