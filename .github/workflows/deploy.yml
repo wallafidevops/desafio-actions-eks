@@ -7,7 +7,6 @@ on:
             required: true
             description: 'Nome ambiente'
 
-
 jobs:
   deploy:
     name: Deploy no kubernetes
@@ -20,7 +19,7 @@ jobs:
       GIT_USER_NAME: wallafidevops
       GIT_USER_EMAIL: wallafisantos55@gmail.com
       ARGOCD_SERVER: argocd.app.wsnobrega.life
-      ARGOCD_APP_NAME: review-filmes-prod
+      ARGOCD_APP_NAME: filmes-v2
       BRANCH_NAME: ${{ github.ref_name }}
     steps:
       - name: Checkout repositório atual
@@ -38,7 +37,7 @@ jobs:
           git config --global user.name "$GIT_USER_NAME"
           git config --global user.email "$GIT_USER_EMAIL"
 
-      - name: Clonar repositório GitOps e atualizar imagens
+      - name: Clonar repositório GitOps
         run: |
           rm -rf desafio-actions-eks
           git clone https://${{ secrets.GIT_USERNAME }}:${{ secrets.GIT_PASSWORD }}@github.com/wallafidevops/desafio-actions-eks.git
@@ -47,22 +46,20 @@ jobs:
           git checkout $BRANCH_NAME
           git pull origin $BRANCH_NAME
 
-          echo "🔄 Substituindo imagens em todos os YAMLs de review-filmes..."
-          find ./k8s -name "*.yaml" -exec sed -i "s|image: .*review-filmes:.*|image: $AWS_ECR_URI/$IMAGE_NAME:v${GITHUB_RUN_NUMBER}|" {} \;
+          # Substituir imagem com sed (expressão robusta)
+          sed -i 's|image: .*review-filmes:.*|image: '"$AWS_ECR_URI/$IMAGE_NAME:${{ github.run_number }}"'|' ./k8s/deployment.yaml
 
-          grep -rn 'review-filmes' ./k8s || true
-
+          echo "YAML final:"
           cat ./k8s/deployment.yaml
 
           git add ./k8s
-          git commit -m "[skip ci] Atualizando imagem para $AWS_ECR_URI/$IMAGE_NAME:v${GITHUB_RUN_NUMBER}" || echo "Nada para commitar"
+          git commit -m "Alteração para a imagem 216989136189.dkr.ecr.us-east-1.amazonaws.com/review-filmes:v${{ github.run_number }}"
           git push origin HEAD:$BRANCH_NAME
 
       - name: Fazer login e sincronizar com ArgoCD
         run: |
           argocd login $ARGOCD_SERVER --insecure --username admin --password ${{ secrets.ARGOCD_TOKEN }} --grpc-web
-          argocd app sync $ARGOCD_APP_NAME --force --prune --grpc-web
-
+          argocd app sync $ARGOCD_APP_NAME --force --prune --grpc-web          
 
 # jobs:
 #   deploy:
@@ -76,7 +73,7 @@ jobs:
 #       GIT_USER_NAME: wallafidevops
 #       GIT_USER_EMAIL: wallafisantos55@gmail.com
 #       ARGOCD_SERVER: argocd.app.wsnobrega.life
-#       ARGOCD_APP_NAME: filmes-v2
+#       ARGOCD_APP_NAME: review-filmes-prod
 #       BRANCH_NAME: ${{ github.ref_name }}
 #     steps:
 #       - name: Checkout repositório atual
@@ -94,7 +91,7 @@ jobs:
 #           git config --global user.name "$GIT_USER_NAME"
 #           git config --global user.email "$GIT_USER_EMAIL"
 
-#       - name: Clonar repositório GitOps
+#       - name: Clonar repositório GitOps e atualizar imagens
 #         run: |
 #           rm -rf desafio-actions-eks
 #           git clone https://${{ secrets.GIT_USERNAME }}:${{ secrets.GIT_PASSWORD }}@github.com/wallafidevops/desafio-actions-eks.git
@@ -103,20 +100,24 @@ jobs:
 #           git checkout $BRANCH_NAME
 #           git pull origin $BRANCH_NAME
 
-#           # Substituir imagem com sed (expressão robusta)
-#           sed -i 's|image: .*review-filmes:.*|image: '"$AWS_ECR_URI/$IMAGE_NAME:${{ github.run_number }}"'|' ./k8s/deployment.yaml
+#           echo "🔄 Substituindo imagens em todos os YAMLs de review-filmes..."
+#           find ./k8s -name "*.yaml" -exec sed -i "s|image: .*review-filmes:.*|image: $AWS_ECR_URI/$IMAGE_NAME:v${GITHUB_RUN_NUMBER}|" {} \;
 
-#           echo "YAML final:"
+#           grep -rn 'review-filmes' ./k8s || true
+
 #           cat ./k8s/deployment.yaml
 
 #           git add ./k8s
-#           git commit -m "Alteração para a imagem 216989136189.dkr.ecr.us-east-1.amazonaws.com/review-filmes:v${{ github.run_number }}"
+#           git commit -m "[skip ci] Atualizando imagem para $AWS_ECR_URI/$IMAGE_NAME:v${GITHUB_RUN_NUMBER}" || echo "Nada para commitar"
 #           git push origin HEAD:$BRANCH_NAME
 
 #       - name: Fazer login e sincronizar com ArgoCD
 #         run: |
 #           argocd login $ARGOCD_SERVER --insecure --username admin --password ${{ secrets.ARGOCD_TOKEN }} --grpc-web
-#           argocd app sync $ARGOCD_APP_NAME --force --prune --grpc-web            
+#           argocd app sync $ARGOCD_APP_NAME --force --prune --grpc-web
+
+
+  
 
 # jobs:
 #   deploy:
