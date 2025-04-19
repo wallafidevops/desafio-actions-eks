@@ -45,38 +45,26 @@ jobs:
 
           git checkout $BRANCH_NAME
           git pull origin $BRANCH_NAME
-          git fetch --depth=2 origin $BRANCH_NAME
 
-          # Verifica se há mudanças em k8s/
-          if git diff --name-only HEAD^ HEAD | grep -q '^k8s/'; then
-            echo "Alterações em k8s detectadas. Continuando..."
-          else
-            echo "Sem alterações em k8s. Pulando deploy."
-            exit 0
-          fi
+          # Substituir imagem com sed (expressão robusta)
+          sed -i 's|image: .*review-filmes:.*|image: '"$AWS_ECR_URI/$IMAGE_NAME:${{ github.run_number }}"'|' ./k8s/deployment.yaml
 
-          # Atualiza imagem com yq
-          export IMAGE_TAG="${AWS_ECR_URI}/${IMAGE_NAME}:${BUILD_ID}"
-          yq -i ".spec.template.spec.containers[0].image = strenv(IMAGE_TAG)" ./k8s/deployment.yaml
-          yq -i ".spec.template.spec.containers[0].imagePullPolicy = \"Always\"" ./k8s/deployment.yaml
-
-          echo "YAML após modificação:"
+          echo "YAML final:"
           cat ./k8s/deployment.yaml
 
-          git add ./k8s/
-          git commit -m "[skip ci] Atualizando imagem para $IMAGE_TAG" || echo "Nada para commitar"
-          git push --no-verify origin HEAD:$BRANCH_NAME
+          git add ./k8s
+          git commit -m "Alteração para a imagem 216989136189.dkr.ecr.us-east-1.amazonaws.com/review-filmes:v${{ github.run_number }}"
+          git push oigin $BRANCH_NAME
 
       - name: Fazer login e sincronizar com ArgoCD
         run: |
           argocd login $ARGOCD_SERVER --insecure --username admin --password ${{ secrets.ARGOCD_TOKEN }} --grpc-web
-          argocd app sync $ARGOCD_APP_NAME --force --prune --grpc-web
-
+          argocd app sync $ARGOCD_APP_NAME --force --prune --grpc-web            
 
 # jobs:
 #   deploy:
 #     name: Deploy no kubernetes
-#     environment:  ${{ inputs.environment }}
+#     environment: ${{ inputs.environment }}
 #     runs-on: ubuntu-latest
 #     env:
 #       AWS_ECR_URI: 216989136189.dkr.ecr.us-east-1.amazonaws.com
@@ -95,7 +83,6 @@ jobs:
 #         run: |
 #           sudo apt-get update
 #           sudo apt-get install -y openssh-client curl git yq
-
 #           curl -sSL -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
 #           chmod +x /usr/local/bin/argocd
 
@@ -111,28 +98,35 @@ jobs:
 #           cd desafio-actions-eks
 
 #           git checkout $BRANCH_NAME
-
+#           git pull origin $BRANCH_NAME
 #           git fetch --depth=2 origin $BRANCH_NAME
 
-#           if git diff --name-only HEAD^ HEAD | grep -qv '^k8s/'; then
-#             echo "Há mudanças fora de k8s/"
+#           # Verifica se há mudanças em k8s/
+#           if git diff --name-only HEAD^ HEAD | grep -q '^k8s/'; then
+#             echo "Alterações em k8s detectadas. Continuando..."
 #           else
-#             echo "Sem mudanças relevantes. Pulando."
+#             echo "Sem alterações em k8s. Pulando deploy."
 #             exit 0
 #           fi
 
-#           yq -y '(.spec.template.spec.containers[0].image) = "'"$AWS_ECR_URI/$IMAGE_NAME:$BUILD_ID"'"' ./k8s/deployment.yaml > temp.yaml && mv temp.yaml ./k8s/deployment.yaml
+#           # Atualiza imagem com yq
+#           export IMAGE_TAG="${AWS_ECR_URI}/${IMAGE_NAME}:${BUILD_ID}"
+#           yq -i ".spec.template.spec.containers[0].image = strenv(IMAGE_TAG)" ./k8s/deployment.yaml
+#           yq -i ".spec.template.spec.containers[0].imagePullPolicy = \"Always\"" ./k8s/deployment.yaml
+
+#           echo "YAML após modificação:"
+#           cat ./k8s/deployment.yaml
 
 #           git add ./k8s/
-
-#           git commit -m "[skip ci] Atualizando imagem para $AWS_ECR_URI/$IMAGE_NAME:$BUILD_ID" || echo "Nada para commitar"
+#           git commit -m "[skip ci] Atualizando imagem para $IMAGE_TAG" || echo "Nada para commitar"
 #           git push --no-verify origin HEAD:$BRANCH_NAME
-
 
 #       - name: Fazer login e sincronizar com ArgoCD
 #         run: |
-#           argocd login $ARGOCD_SERVER --insecure --username admin --password ${{ secrets.ARGOCD_TOKEN }} --insecure  --grpc-web
-#           argocd app sync $ARGOCD_APP_NAME --force --grpc-web
+#           argocd login $ARGOCD_SERVER --insecure --username admin --password ${{ secrets.ARGOCD_TOKEN }} --grpc-web
+#           argocd app sync $ARGOCD_APP_NAME --force --prune --grpc-web
+
+
           
     # deploy:
     #     name: Deploy no kubernetes
