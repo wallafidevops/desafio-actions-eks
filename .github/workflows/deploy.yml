@@ -50,10 +50,8 @@ jobs:
           echo "🔄 Substituindo imagens em todos os YAMLs de review-filmes..."
           find ./k8s -name "*.yaml" -exec sed -i "s|image: .*review-filmes:.*|image: $AWS_ECR_URI/$IMAGE_NAME:v${GITHUB_RUN_NUMBER}|" {} \;
 
-          echo "🧾 Arquivos com 'review-filmes' após substituição:"
           grep -rn 'review-filmes' ./k8s || true
 
-          echo "📄 Exibindo conteúdo final do deployment.yaml:"
           cat ./k8s/deployment.yaml
 
           git add ./k8s
@@ -64,13 +62,6 @@ jobs:
         run: |
           argocd login $ARGOCD_SERVER --insecure --username admin --password ${{ secrets.ARGOCD_TOKEN }} --grpc-web
           argocd app sync $ARGOCD_APP_NAME --force --prune --grpc-web
-
-
-
-      - name: Verificar imagem aplicada no cluster
-        run: |
-          echo "📦 Imagem atual aplicada no cluster:"
-          kubectl -n filmes get deployment reviewfilmes -o jsonpath='{.spec.template.spec.containers[0].image}'; echo
 
 
 # jobs:
