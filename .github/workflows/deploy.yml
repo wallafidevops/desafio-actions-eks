@@ -70,6 +70,7 @@ jobs:
           argocd app sync $ARGOCD_APP_NAME --force --grpc-web
           
 
+          
     # deploy:
     #     name: Deploy no kubernetes
     #     runs-on: ubuntu-latest
