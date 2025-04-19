@@ -69,6 +69,8 @@ jobs:
 
 
 
+
+
       - name: Verificar imagem aplicada no cluster
         run: |
           echo "📦 Imagem atual aplicada no cluster:"
