@@ -62,13 +62,9 @@ jobs:
 
       - name: Fazer login e sincronizar com ArgoCD
         run: |
+          COMMIT=$(git rev-parse HEAD)
           argocd login $ARGOCD_SERVER --insecure --username admin --password ${{ secrets.ARGOCD_TOKEN }} --grpc-web
-          argocd app sync $ARGOCD_APP_NAME --force --prune --grpc-web
-
-      - name: Verificar imagem aplicada no cluster
-        run: |
-          echo "📦 Imagem atual aplicada no cluster:"
-          kubectl -n filmes get deployment reviewfilmes -o jsonpath='{.spec.template.spec.containers[0].image}'; echo
+          argocd app sync $ARGOCD_APP_NAME --revision $COMMIT --force --prune --grpc-web
 
 
 # jobs:
