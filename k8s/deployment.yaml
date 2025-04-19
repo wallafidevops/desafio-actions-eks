@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: postgre
-          image: 216989136189.dkr.ecr.us-east-1.amazonaws.com/review-filmes:15
+          image: 216989136189.dkr.ecr.us-east-1.amazonaws.com/review-filmes:19
           env:
             - name: POSTGRES_PASSWORD
               value: Passw0rd2024!
@@ -38,7 +38,7 @@ spec:
   template:
     spec:
       containers:
-        - image: 216989136189.dkr.ecr.us-east-1.amazonaws.com/review-filmes:15
+        - image: 216989136189.dkr.ecr.us-east-1.amazonaws.com/review-filmes:19
           imagePullPolicy: Always
 ---
 apiVersion: apps/v1
@@ -57,7 +57,7 @@ spec:
     spec:
       containers:
         - name: reviewfilmes
-          image: 216989136189.dkr.ecr.us-east-1.amazonaws.com/review-filmes:15
+          image: 216989136189.dkr.ecr.us-east-1.amazonaws.com/review-filmes:19
           env:
             - name: ASPNETCORE_HTTP_PORTS
               value: '8080'

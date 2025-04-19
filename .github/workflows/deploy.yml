@@ -69,8 +69,6 @@ jobs:
           argocd login $ARGOCD_SERVER --insecure --username admin --password ${{ secrets.ARGOCD_TOKEN }}
           argocd app sync $ARGOCD_APP_NAME --force --grpc-web
           
-
-
     # deploy:
     #     name: Deploy no kubernetes
     #     runs-on: ubuntu-latest
