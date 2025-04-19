@@ -22,4 +22,4 @@ spec:
               value: Host=postgre;Database=reviewfilmes;Username=reviewfilmes;Password=Passw0rd2024!
           ports:
             - containerPort: 8080
-          imagePullPolicy: Always
+
