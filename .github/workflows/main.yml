@@ -12,8 +12,8 @@ on:
       - "main"      
       - "develop"     
     types: [closed] 
-    paths-ignore: 
-      - k8s/*      
+    # paths-ignore: 
+    #   - k8s/*      
   workflow_dispatch:  
 
   

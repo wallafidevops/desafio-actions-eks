@@ -127,6 +127,69 @@ jobs:
 #           argocd app sync $ARGOCD_APP_NAME --force --prune --grpc-web
 
 
+
+
+# jobs:
+#   deploy:
+#     name: Deploy no kubernetes
+#     environment:  ${{ inputs.environment }}
+#     runs-on: ubuntu-latest
+#     env:
+#       AWS_ECR_URI: 216989136189.dkr.ecr.us-east-1.amazonaws.com
+#       IMAGE_NAME: review-filmes
+#       BUILD_ID: ${{ github.run_number }}
+#       GIT_USER_NAME: wallafidevops
+#       GIT_USER_EMAIL: wallafisantos55@gmail.com
+#       ARGOCD_SERVER: argocd.app.wsnobrega.life
+#       ARGOCD_APP_NAME: filmes-v2
+#       BRANCH_NAME: ${{ github.ref_name }}
+#     steps:
+#       - name: Checkout repositório atual
+#         uses: actions/checkout@v4
+
+#       - name: Instalar dependências (yq, argocd, ssh)
+#         run: |
+#           sudo apt-get update
+#           sudo apt-get install -y openssh-client curl git yq
+
+#           curl -sSL -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
+#           chmod +x /usr/local/bin/argocd
+
+#       - name: Configurar Git
+#         run: |
+#           git config --global user.name "$GIT_USER_NAME"
+#           git config --global user.email "$GIT_USER_EMAIL"
+
+#       - name: Clonar repositório GitOps
+#         run: |
+#           rm -rf desafio-actions-eks
+#           git clone https://${{ secrets.GIT_USERNAME }}:${{ secrets.GIT_PASSWORD }}@github.com/wallafidevops/desafio-actions-eks.git
+#           cd desafio-actions-eks
+
+#           git checkout $BRANCH_NAME
+
+#           git fetch --depth=2 origin $BRANCH_NAME
+
+#           if git diff --name-only HEAD^ HEAD | grep -qv '^k8s/'; then
+#             echo "Há mudanças fora de k8s/"
+#           else
+#             echo "Sem mudanças relevantes. Pulando."
+#             exit 0
+#           fi
+
+#           yq -y '(.spec.template.spec.containers[0].image) = "'"$AWS_ECR_URI/$IMAGE_NAME:$BUILD_ID"'"' ./k8s/deployment.yaml > temp.yaml && mv temp.yaml ./k8s/deployment.yaml
+
+#           git add ./k8s/
+
+#           git commit -m "[skip ci] Atualizando imagem para $AWS_ECR_URI/$IMAGE_NAME:$BUILD_ID" || echo "Nada para commitar"
+#           git push --no-verify origin HEAD:$BRANCH_NAME
+
+
+#       - name: Fazer login e sincronizar com ArgoCD
+#         run: |
+#           argocd login $ARGOCD_SERVER --insecure --username admin --password ${{ secrets.ARGOCD_TOKEN }} --insecure  --grpc-web
+#           argocd app sync $ARGOCD_APP_NAME --force --grpc-web
+
           
     # deploy:
     #     name: Deploy no kubernetes
