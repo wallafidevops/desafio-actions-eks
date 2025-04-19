@@ -7,13 +7,19 @@ permissions:
   
 
 on:
-  pull_request:
+  push:
     branches: 
       - "main"      
       - "develop"     
-    types: [closed] 
     paths-ignore: 
-      - k8s/*      
+      - k8s/*
+  # pull_request:
+  #   branches: 
+  #     - "main"      
+  #     - "develop"     
+  #   types: [closed] 
+  #   paths-ignore: 
+  #     - k8s/*      
   workflow_dispatch:  
 
   
