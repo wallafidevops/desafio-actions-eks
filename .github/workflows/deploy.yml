@@ -66,11 +66,11 @@ jobs:
 
       - name: Fazer login e sincronizar com ArgoCD
         run: |
-          argocd login $ARGOCD_SERVER --insecure --username admin --password ${{ secrets.ARGOCD_TOKEN }}
+          argocd login $ARGOCD_SERVER --insecure --username admin --password ${{ secrets.ARGOCD_TOKEN }} --insecure  --grpc-web
           argocd app sync $ARGOCD_APP_NAME --force --grpc-web
           
 
-          
+
     # deploy:
     #     name: Deploy no kubernetes
     #     runs-on: ubuntu-latest
