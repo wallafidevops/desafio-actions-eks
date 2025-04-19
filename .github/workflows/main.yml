@@ -87,7 +87,7 @@ jobs:
     needs: [release-dev]
     uses: wallafidevops/desafio-actions-eks/.github/workflows/deploy.yml@develop
     with:
-      environment: prod
+      environment: dev
     secrets: inherit      
 
 
