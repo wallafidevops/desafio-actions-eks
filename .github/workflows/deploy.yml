@@ -67,6 +67,8 @@ jobs:
           argocd app sync $ARGOCD_APP_NAME --revision $COMMIT --force --prune --grpc-web
 
 
+
+
       - name: Verificar imagem aplicada no cluster
         run: |
           echo "📦 Imagem atual aplicada no cluster:"
