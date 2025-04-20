@@ -1,5 +1,5 @@
 name: Pipeline CI/CD
-run-name: Pipeline CI/CD executada por ${{ github.actor }} em ${{ github.run_number }}
+run-name: Pipeline CI/CD executada no ambiente de ${{ vars.STAGE }}
 permissions:
   id-token: write
   contents: read
@@ -7,13 +7,20 @@ permissions:
   
 
 on:
-  pull_request:
+  push:
     branches: 
       - "main"      
       - "develop"     
-    types: [closed] 
     paths-ignore: 
-      - k8s/*      
+      - k8s/deploy/hml/*
+      - k8s/deploy/prd*
+  # pull_request:
+  #   branches: 
+  #     - "main"      
+  #     - "develop"     
+  #   types: [closed] 
+  #   paths-ignore: 
+  #     - k8s/*      
   workflow_dispatch:  
 
   
@@ -87,7 +94,7 @@ jobs:
     needs: [release-dev]
     uses: wallafidevops/desafio-actions-eks/.github/workflows/deploy.yml@develop
     with:
-      environment: prod
+      environment: dev
     secrets: inherit      
 
 
