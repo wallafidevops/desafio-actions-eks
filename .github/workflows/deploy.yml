@@ -62,3 +62,4 @@ jobs:
           argocd login $ARGOCD_SERVER --insecure --username admin --password ${{ secrets.ARGOCD_TOKEN }} --grpc-web
           argocd app sync ${{ vars.STAGE }}-$ARGOCD_APP_NAME --force --prune --grpc-web      
 
+
