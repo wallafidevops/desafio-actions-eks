@@ -269,4 +269,4 @@ jobs:
     #             sed -i 's|image: 216989136189.dkr.ecr.us-east-1.amazonaws.com/review-filmes:v[0-9]\{1,3\}|image: 216989136189.dkr.ecr.us-east-1.amazonaws.com/review-filmes:v${{ github.run_number }}|g' ./k8s/deployment.yaml
     #             git add ./k8s
     #             git commit -m "Alteração para a imagem 216989136189.dkr.ecr.us-east-1.amazonaws.com/review-filmes:v${{ github.run_number }}" || echo "Nada para commitar"
-    #             git push origin   
+    #             git push origin        
