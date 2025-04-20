@@ -1,5 +1,5 @@
 name: Pipeline CI/CD
-run-name: Pipeline CI/CD executada por ${{ github.actor }} em ${{ github.run_number }}
+run-name: Pipeline CI/CD executada no ambiente de ${{ vars.STAGE }}
 permissions:
   id-token: write
   contents: read
@@ -12,7 +12,8 @@ on:
       - "main"      
       - "develop"     
     paths-ignore: 
-      - k8s/*
+      - k8s/deploy/hml/*
+      - k8s/deploy/prd*
   # pull_request:
   #   branches: 
   #     - "main"      
