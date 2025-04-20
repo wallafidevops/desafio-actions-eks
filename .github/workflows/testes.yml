@@ -7,8 +7,7 @@ on:
             required: true
             description: 'Nome ambiente'
             
-
-            
+   
 jobs:
     unit-testes:
         name: Testes unitários
@@ -24,6 +23,7 @@ jobs:
           - name: Executando testes unitários
             working-directory: ./src
             run: dotnet test ./Review-Filmes.Test.Unit/Review-Filmes.Test.Unit.csproj 
+
 
     integration-testes:
         name: Testes de integração
@@ -94,4 +94,5 @@ jobs:
             
 
 
+            
 ## https://plataforma.devopspro.com.br/courses/af00ffe1-1d2f-4dce-9a19-780e59273907/2/1/28/conteudos?capitulo=28&conteudo=978  minuto 30
