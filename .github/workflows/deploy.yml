@@ -104,12 +104,12 @@ jobs:
           git pull origin $BRANCH_NAME
 
           # Substituir imagem com sed (expressão robusta)
-          sed -i 's|image: .*review-filmes:.*|image: '"$AWS_ECR_URI/${{ vars.STAGE }}-$IMAGE_NAME:${{ github.run_number }}"'|' ./k8s/deployment.yaml
+          sed -i 's|image: .*review-filmes:.*|image: '"$AWS_ECR_URI/${{ vars.STAGE }}-$IMAGE_NAME:${{ github.run_number }}"'|' ./k8s/deploy/${{ vars.STAGE }}/deployment.yaml
 
           echo "YAML final:"
-          cat ./k8s/deployment.yaml
+          cat ./k8s/deploy/${{ vars.STAGE }}/deployment.yaml
 
-          git add ./k8s
+          git add ./k8s/deploy/${{ vars.STAGE }}
           git commit -m "Alteração para a imagem 216989136189.dkr.ecr.us-east-1.amazonaws.com/${{ vars.STAGE }}-review-filmes:v${{ github.run_number }}"
           git push origin HEAD:$BRANCH_NAME
 
