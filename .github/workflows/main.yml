@@ -98,4 +98,3 @@ jobs:
     with:
       environment: prod
     secrets: inherit
-
