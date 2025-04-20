@@ -78,7 +78,6 @@ jobs:
             working-directory: ./src
             run: |
                 dotnet sonarscanner begin /k:"${{ vars.STAGE }}-review-filmes" /d:sonar.host.url="${{ secrets.SONAR_HOST_URL }}" /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
-
                 dotnet build Review-Filmes.sln
                 dotnet sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}" 
           - name: Verificação do quality gate 
