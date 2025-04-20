@@ -38,13 +38,13 @@ jobs:
               file: ./src/Review-Filmes.Web/Dockerfile
               push: true
               tags: |
-                ${{ vars.ID_ACCOUNT }}.dkr.ecr.${{ vars.AWS_REGION}}.amazonaws.com/review-filmes:latest
-                ${{ vars.ID_ACCOUNT }}.dkr.ecr.${{ vars.AWS_REGION}}.amazonaws.com/review-filmes:${{ github.run_number }}
+                ${{ vars.ID_ACCOUNT }}.dkr.ecr.${{ vars.AWS_REGION}}.amazonaws.com/${{ vars.STAGE }}-review-filmes:latest
+                ${{ vars.ID_ACCOUNT }}.dkr.ecr.${{ vars.AWS_REGION}}.amazonaws.com/${{ vars.STAGE }}-review-filmes:${{ github.run_number }}
         - name: Executar Trivy
           uses: aquasecurity/trivy-action@0.23.0
           with:
             scan-type: image
-            image-ref: ${{ vars.ID_ACCOUNT }}.dkr.ecr.${{ vars.AWS_REGION}}.amazonaws.com/review-filmes:${{ github.run_number }} 
+            image-ref: ${{ vars.ID_ACCOUNT }}.dkr.ecr.${{ vars.AWS_REGION}}.amazonaws.com/${{ vars.STAGE }}-review-filmes:${{ github.run_number }} 
             format: sarif
             output: trivy-docker-result.sarif
             severity: 'UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL'

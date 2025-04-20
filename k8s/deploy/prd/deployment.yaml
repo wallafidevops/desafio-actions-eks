@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: reviewfilmes
+  name: prd-reviewfilmes
 spec:
   replicas: 1
   selector:
@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: reviewfilmes
-          image: 216989136189.dkr.ecr.us-east-1.amazonaws.com/review-filmes:41
+          image: 216989136189.dkr.ecr.us-east-1.amazonaws.com/prd-review-filmes:38
           env:
             - name: ASPNETCORE_HTTP_PORTS
               value: '8080'
