@@ -52,10 +52,14 @@ jobs:
             output: trivy-docker-result.sarif
             severity: 'UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL'
 
-        - name: upload do arquivo triy para github 
-          uses: github/codeql-action/upload-sarif@v3
-          with:
-              category: docker-result
-              sarif_file: trivy-docker-result.sarif            
+        - name: Enviar SARIF para S3
+          run: |
+            aws s3 cp trivy-docker-result.sarif s3://meu-bucket-relatorios-security/security-reports/${{ vars.STAGE }}-review-filmes-${{ github.run_number }}.sarif            
+
+        # - name: upload do arquivo triy para github 
+        #   uses: github/codeql-action/upload-sarif@v3
+        #   with:
+        #       category: docker-result
+        #       sarif_file: trivy-docker-result.sarif            
 
               
