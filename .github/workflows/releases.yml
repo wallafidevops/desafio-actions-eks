@@ -7,6 +7,10 @@ on:
             required: true
             description: 'Nome ambiente'
 
+permissions:
+  contents: read
+  security-events: write            
+
 jobs:
     release:
         name: Criação de release
@@ -48,10 +52,14 @@ jobs:
             output: trivy-docker-result.sarif
             severity: 'UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL'
 
-        - name: upload do arquivo triy para github 
-          uses: github/codeql-action/upload-sarif@v3
-          with:
-              category: docker-result
-              sarif_file: trivy-docker-result.sarif            
+        - name: Enviar SARIF para S3
+          run: |
+            aws s3 cp trivy-docker-result.sarif s3://artefatos-pipeline-216989136189/${{ vars.STAGE }}-review-filmes/${{ vars.STAGE }}-review-filmes-${{ github.run_number }}.sarif            
+
+        # - name: upload do arquivo triy para github 
+        #   uses: github/codeql-action/upload-sarif@v3
+        #   with:
+        #       category: docker-result
+        #       sarif_file: trivy-docker-result.sarif            
 
               
