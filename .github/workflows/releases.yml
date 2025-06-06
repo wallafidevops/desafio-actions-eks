@@ -54,7 +54,7 @@ jobs:
 
         - name: Enviar SARIF para S3
           run: |
-            aws s3 cp trivy-docker-result.sarif s3://meu-bucket-relatorios-security/security-reports/${{ vars.STAGE }}-review-filmes-${{ github.run_number }}.sarif            
+            aws s3 cp trivy-docker-result.sarif s3://artefatos-pipeline-216989136189/${{ vars.STAGE }}-review-filmes/${{ vars.STAGE }}-review-filmes-${{ github.run_number }}.sarif            
 
         # - name: upload do arquivo triy para github 
         #   uses: github/codeql-action/upload-sarif@v3
