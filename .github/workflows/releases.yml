@@ -7,6 +7,10 @@ on:
             required: true
             description: 'Nome ambiente'
 
+permissions:
+  contents: read
+  security-events: write            
+
 jobs:
     release:
         name: Criação de release
