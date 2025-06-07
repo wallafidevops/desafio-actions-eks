@@ -113,9 +113,6 @@ jobs:
           cd k8s/deploy/${{ vars.STAGE }}
           kustomize edit set image $AWS_ECR_URI/${{ vars.STAGE }}-$IMAGE_NAME=$AWS_ECR_URI/${{ vars.STAGE }}-$IMAGE_NAME:v${{ github.run_number }}
 
-          echo "YAML final:"
-          kustomize build .
-
           git add .
           git commit -m "[BOT] Atualiza imagem para $AWS_ECR_URI/${{ vars.STAGE }}-$IMAGE_NAME:v${{ github.run_number }}"
           git push origin $BRANCH_NAME
